@@ -1,13 +1,122 @@
 import 'package:flutter/material.dart';
+import '../../models/post.dart';
 import '../../shared/theme.dart';
+import '../widgets/post_tile.dart';
 
 class PlacesPage extends StatelessWidget {
   const PlacesPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text('ALL PLACES'),
+    Widget header() {
+      return AppBar(
+        backgroundColor: kBGColor,
+        title: Container(
+          decoration: BoxDecoration(
+            border: Border(
+              left: BorderSide(
+                color: kPrimaryColor,
+                width: 3.0,
+              ),
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                Text(
+                  'Semua Wisata',
+                  style: blackTextStyle.copyWith(
+                    fontSize: 18,
+                    fontWeight: semibold,
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 180),
+                  width: 24,
+                  height: 24,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(
+                        'assets/img/seach1.png',
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+        elevation: 0,
+        automaticallyImplyLeading: false,
+      );
+    }
+
+    Widget places() {
+      return Container(
+        margin: EdgeInsets.only(
+          top: 140,
+          bottom: 10,
+        ),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            children: [
+              PostTile(
+                Post(
+                    id: 01,
+                    name: 'Tanjung Lesung',
+                    imageUrl: 'assets/img/TanjungLesung.jpg',
+                    address: 'Tanjung Lesung, Banten'),
+              ),
+              PostTile(
+                Post(
+                    id: 02,
+                    name: 'Gunung Luhur',
+                    imageUrl: 'assets/img/gluhur.jpg',
+                    address: 'Citorek Kidul, Kec Cibeber'),
+              ),
+              PostTile(
+                Post(
+                    id: 03,
+                    name: 'Suku Baduy',
+                    imageUrl: 'assets/img/baduy.jpg',
+                    address: 'Baduy, Banten'),
+              ),
+              PostTile(
+                Post(
+                    id: 03,
+                    name: 'Suku Baduy',
+                    imageUrl: 'assets/img/baduy.jpg',
+                    address: 'Baduy, Banten'),
+              ),
+              PostTile(
+                Post(
+                    id: 03,
+                    name: 'Suku Baduy',
+                    imageUrl: 'assets/img/baduy.jpg',
+                    address: 'Baduy, Banten'),
+              ),
+              PostTile(
+                Post(
+                    id: 03,
+                    name: 'Suku Baduy',
+                    imageUrl: 'assets/img/baduy.jpg',
+                    address: 'Baduy, Banten'),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return Scaffold(
+      body: Stack(
+        children: [
+          header(),
+          places(),
+        ],
+      ),
     );
   }
 }

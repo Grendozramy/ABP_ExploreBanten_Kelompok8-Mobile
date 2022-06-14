@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../shared/theme.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import '../widgets/kategori_card.dart';
+import '../widgets/header.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -252,14 +253,50 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
-    return ListView(
-      children: [
-        backgroundImage(),
-        KategoryTitle(),
-        Category(),
-        TerbaruTitle(),
-        Terbaru()
-      ],
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        toolbarHeight: 82,
+        backgroundColor: Colors.transparent,
+        shadowColor: Colors.transparent,
+        title: Container(
+          margin: EdgeInsets.only(top: 74),
+          child: Align(
+            alignment: Alignment.topCenter,
+            child: Container(
+              width: double.infinity,
+              height: 60,
+              margin: EdgeInsets.only(bottom: 30, left: 24, right: 24),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Image.asset(
+                    'assets/img/logo1.png',
+                    width: 97,
+                    height: 66,
+                  ),
+                  Image.asset(
+                    'assets/img/search.png',
+                    width: 40,
+                    height: 40,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        elevation: 0,
+        automaticallyImplyLeading: false,
+      ),
+      body: ListView(
+        children: [
+          backgroundImage(),
+          KategoryTitle(),
+          Category(),
+          TerbaruTitle(),
+          Terbaru()
+        ],
+      ),
     );
   }
 }
