@@ -3,12 +3,10 @@ import '../../shared/theme.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
-class MapsPage extends StatelessWidget {
+class RutePage extends StatelessWidget {
   var points = <LatLng>[
-    new LatLng(-6.732257953181979, 105.50034602689583),
-    new LatLng(-6.01437603546215, 106.06339531104375),
-    new LatLng(-6.914975375252903, 106.3325603346852),
-    new LatLng(-6.732257953181979, 105.50034602689583),
+    new LatLng(-6.407561526553379, 106.082621384161),
+    new LatLng(-6.748316912654932, 106.32519179819867),
   ];
 
   @override
@@ -30,7 +28,7 @@ class MapsPage extends StatelessWidget {
               child: Row(
                 children: [
                   Text(
-                    'Maps',
+                    'Rute Maps Gunung Luhur',
                     style: blackTextStyle.copyWith(
                       fontSize: 18,
                       fontWeight: semibold,
@@ -64,41 +62,26 @@ class MapsPage extends StatelessWidget {
                   Marker(
                     width: 45.0,
                     height: 45.0,
+                    point: LatLng(-6.748316912654932, 106.32519179819867),
+                    builder: (context) => Container(
+                      child: IconButton(
+                        icon: Icon(Icons.location_on),
+                        color: Colors.red,
+                        iconSize: 45.0,
+                        onPressed: () {
+                          print('Marker tapped');
+                        },
+                      ),
+                    ),
+                  ),
+                  Marker(
+                    width: 45.0,
+                    height: 45.0,
                     point: LatLng(-6.407561526553379, 106.082621384161),
                     builder: (context) => Container(
                       child: IconButton(
                         icon: Icon(Icons.location_on),
-                        color: Colors.red,
-                        iconSize: 45.0,
-                        onPressed: () {
-                          print('Marker tapped');
-                        },
-                      ),
-                    ),
-                  ),
-                  Marker(
-                    width: 45.0,
-                    height: 45.0,
-                    point: LatLng(-6.364085531766116, 106.24839359475253),
-                    builder: (context) => Container(
-                      child: IconButton(
-                        icon: Icon(Icons.location_on),
-                        color: Colors.red,
-                        iconSize: 45.0,
-                        onPressed: () {
-                          print('Marker tapped');
-                        },
-                      ),
-                    ),
-                  ),
-                  Marker(
-                    width: 45.0,
-                    height: 45.0,
-                    point: LatLng(-6.327828860484541, 106.1209375338119),
-                    builder: (context) => Container(
-                      child: IconButton(
-                        icon: Icon(Icons.location_on),
-                        color: Colors.red,
+                        color: Colors.blue,
                         iconSize: 45.0,
                         onPressed: () {
                           print('Marker tapped');
@@ -107,10 +90,10 @@ class MapsPage extends StatelessWidget {
                     ),
                   ),
                 ]),
-                //   new PolylineLayerOptions(polylines: [
-                //     new Polyline(
-                //         points: points, strokeWidth: 5.0, color: Colors.red)
-                //   ])
+                new PolylineLayerOptions(polylines: [
+                  new Polyline(
+                      points: points, strokeWidth: 5.0, color: Colors.red)
+                ])
               ]),
         ));
   }

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import '../../models/post.dart';
 import '../../shared/theme.dart';
+import '../../models/kategori.dart';
 import '../widgets/post_tile.dart';
 
-class PlacesPage extends StatelessWidget {
-  const PlacesPage({Key? key}) : super(key: key);
-
+class CategoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget header() {
@@ -23,9 +22,10 @@ class PlacesPage extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Semua Wisata',
+                  'Alam',
                   style: blackTextStyle.copyWith(
                     fontSize: 18,
                     fontWeight: semibold,
@@ -39,7 +39,6 @@ class PlacesPage extends StatelessWidget {
                     );
                   },
                   child: Container(
-                    margin: EdgeInsets.only(left: 180),
                     width: 24,
                     height: 24,
                     decoration: BoxDecoration(
@@ -83,34 +82,6 @@ class PlacesPage extends StatelessWidget {
                     name: 'Gunung Luhur',
                     imageUrl: 'assets/img/gluhur.jpg',
                     address: 'Citorek Kidul, Kec Cibeber'),
-              ),
-              PostTile(
-                Post(
-                    id: 03,
-                    name: 'Suku Baduy',
-                    imageUrl: 'assets/img/baduy.jpg',
-                    address: 'Baduy, Banten'),
-              ),
-              PostTile(
-                Post(
-                    id: 03,
-                    name: 'Suku Baduy',
-                    imageUrl: 'assets/img/baduy.jpg',
-                    address: 'Baduy, Banten'),
-              ),
-              PostTile(
-                Post(
-                    id: 03,
-                    name: 'Suku Baduy',
-                    imageUrl: 'assets/img/baduy.jpg',
-                    address: 'Baduy, Banten'),
-              ),
-              PostTile(
-                Post(
-                    id: 03,
-                    name: 'Suku Baduy',
-                    imageUrl: 'assets/img/baduy.jpg',
-                    address: 'Baduy, Banten'),
               ),
             ],
           ),

@@ -9,24 +9,29 @@ class KategoriCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: 23,
-        vertical: 3,
-      ),
-      margin: EdgeInsets.only(right: 15),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: kPrimaryColor,
-          width: 1,
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, '/tour');
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: 23,
+          vertical: 3,
         ),
-      ),
-      child: Text(
-        kategori.name,
-        style: blackTextStyle.copyWith(
-          fontSize: 18,
-          fontWeight: semibold,
+        margin: EdgeInsets.only(right: 15),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: kPrimaryColor,
+            width: 1,
+          ),
+        ),
+        child: Text(
+          kategori.name,
+          style: blackTextStyle.copyWith(
+            fontSize: 18,
+            fontWeight: semibold,
+          ),
         ),
       ),
     );

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import '../../shared/theme.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import '../widgets/kategori_card.dart';
-import '../widgets/header.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -266,7 +265,7 @@ class _HomePageState extends State<HomePage> {
             child: Container(
               width: double.infinity,
               height: 60,
-              margin: EdgeInsets.only(bottom: 30, left: 24, right: 24),
+              margin: EdgeInsets.only(bottom: 50, left: 24, right: 24),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -275,10 +274,18 @@ class _HomePageState extends State<HomePage> {
                     width: 97,
                     height: 66,
                   ),
-                  Image.asset(
-                    'assets/img/search.png',
-                    width: 40,
-                    height: 40,
+                  GestureDetector(
+                    onTap: () {
+                      showSearch(
+                        context: context,
+                        delegate: CustomSearch(),
+                      );
+                    },
+                    child: Image.asset(
+                      'assets/img/search.png',
+                      width: 40,
+                      height: 40,
+                    ),
                   ),
                 ],
               ),
@@ -298,5 +305,69 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
+  }
+}
+
+class CustomSearch extends SearchDelegate {
+  List<String> searchTerms = [
+    'alam',
+    'budaya',
+  ];
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        onPressed: () {
+          query = '';
+        },
+        icon: const Icon(Icons.clear),
+      ),
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.arrow_back),
+      onPressed: () {
+        close(context, null);
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    List<String> matchQuery = [];
+    for (var item in searchTerms) {
+      if (item.toLowerCase().contains(query.toLowerCase())) {
+        matchQuery.add(item);
+      }
+    }
+    return ListView.builder(
+        itemCount: matchQuery.length,
+        itemBuilder: (context, index) {
+          var result = matchQuery[index];
+          return ListTile(
+            title: Text(result),
+          );
+        });
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    List<String> matchQuery = [];
+    for (var item in searchTerms) {
+      if (item.toLowerCase().contains(query.toLowerCase())) {
+        matchQuery.add(item);
+      }
+    }
+    return ListView.builder(
+        itemCount: matchQuery.length,
+        itemBuilder: (context, index) {
+          var result = matchQuery[index];
+          return ListTile(
+            title: Text(result),
+          );
+        });
   }
 }
