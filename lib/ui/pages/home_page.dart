@@ -1,12 +1,19 @@
-import 'package:explore_banten_mobile/models/kategori.dart';
-import 'package:explore_banten_mobile/models/post.dart';
+import 'package:explore_banten_mobile/models/category_models.dart';
+import 'package:explore_banten_mobile/models/sliders_model.dart';
+import 'package:explore_banten_mobile/providers/category_providers.dart';
+import 'package:explore_banten_mobile/providers/post_providers.dart';
 import 'package:explore_banten_mobile/ui/widgets/post_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../providers/slider_provider.dart';
 import '../../shared/theme.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import '../widgets/kategori_card.dart';
 
 class HomePage extends StatefulWidget {
+  // final SliderModel slider;
+  // HomePage(this.slider);
+
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -31,6 +38,13 @@ class _HomePageState extends State<HomePage> {
   ];
 
   int currentIndex = 0;
+
+  Future<void> updateData() async {
+    await Provider.of<KategoriProvider>(context, listen: false).getKategori();
+    await Provider.of<PlacesProvider>(context, listen: false).getPlace();
+    await Provider.of<SliderProvider>(context, listen: false).getSlider();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -169,20 +183,11 @@ class _HomePageState extends State<HomePage> {
                 width: 24,
               ),
               Row(
-                children: [
-                  KategoriCard(
-                    Kategori(id: 01, name: 'Alam'),
-                  ),
-                  KategoriCard(
-                    Kategori(id: 02, name: 'Budaya'),
-                  ),
-                  KategoriCard(
-                    Kategori(id: 03, name: 'Kuliner'),
-                  ),
-                  KategoriCard(
-                    Kategori(id: 04, name: 'Farhan Gimang'),
-                  ),
-                ],
+                children: KategoriProvider.kategoris
+                    .map(
+                      (kategoris) => KategoriCard(kategoris),
+                    )
+                    .toList(),
               ),
             ],
           ),
@@ -225,149 +230,31 @@ class _HomePageState extends State<HomePage> {
           bottom: 90,
         ),
         child: Column(
-          children: [
-            PostTile(
-              Post(
-                  id: 01,
-                  name: 'Tanjung Lesung',
-                  imageUrl: 'assets/img/TanjungLesung.jpg',
-                  address: 'Tanjung Lesung, Banten'),
-            ),
-            PostTile(
-              Post(
-                  id: 02,
-                  name: 'Gunung Luhur',
-                  imageUrl: 'assets/img/gluhur.jpg',
-                  address: 'Citorek Kidul, Kec Cibeber'),
-            ),
-            PostTile(
-              Post(
-                  id: 03,
-                  name: 'Suku Baduy',
-                  imageUrl: 'assets/img/baduy.jpg',
-                  address: 'Baduy, Banten'),
-            ),
-          ],
+          children: PlacesProvider.places
+              .map(
+                (places) => PostTile(places),
+              )
+              .toList(),
         ),
       );
     }
 
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        toolbarHeight: 82,
-        backgroundColor: Colors.transparent,
-        shadowColor: Colors.transparent,
-        title: Container(
-          margin: EdgeInsets.only(top: 74),
-          child: Align(
-            alignment: Alignment.topCenter,
-            child: Container(
-              width: double.infinity,
-              height: 60,
-              margin: EdgeInsets.only(bottom: 50, left: 24, right: 24),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Image.asset(
-                    'assets/img/logo1.png',
-                    width: 97,
-                    height: 66,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      showSearch(
-                        context: context,
-                        delegate: CustomSearch(),
-                      );
-                    },
-                    child: Image.asset(
-                      'assets/img/search.png',
-                      width: 40,
-                      height: 40,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        elevation: 0,
-        automaticallyImplyLeading: false,
-      ),
-      body: ListView(
-        children: [
-          backgroundImage(),
-          KategoryTitle(),
-          Category(),
-          TerbaruTitle(),
-          Terbaru()
-        ],
-      ),
-    );
-  }
-}
-
-class CustomSearch extends SearchDelegate {
-  List<String> searchTerms = [
-    'alam',
-    'budaya',
-  ];
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    return [
-      IconButton(
-        onPressed: () {
-          query = '';
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await Future.delayed(Duration(milliseconds: 400));
+          updateData();
         },
-        icon: const Icon(Icons.clear),
+        child: ListView(
+          children: [
+            backgroundImage(),
+            KategoryTitle(),
+            Category(),
+            TerbaruTitle(),
+            Terbaru()
+          ],
+        ),
       ),
-    ];
-  }
-
-  @override
-  Widget buildLeading(BuildContext context) {
-    return IconButton(
-      icon: const Icon(Icons.arrow_back),
-      onPressed: () {
-        close(context, null);
-      },
     );
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    List<String> matchQuery = [];
-    for (var item in searchTerms) {
-      if (item.toLowerCase().contains(query.toLowerCase())) {
-        matchQuery.add(item);
-      }
-    }
-    return ListView.builder(
-        itemCount: matchQuery.length,
-        itemBuilder: (context, index) {
-          var result = matchQuery[index];
-          return ListTile(
-            title: Text(result),
-          );
-        });
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    List<String> matchQuery = [];
-    for (var item in searchTerms) {
-      if (item.toLowerCase().contains(query.toLowerCase())) {
-        matchQuery.add(item);
-      }
-    }
-    return ListView.builder(
-        itemCount: matchQuery.length,
-        itemBuilder: (context, index) {
-          var result = matchQuery[index];
-          return ListTile(
-            title: Text(result),
-          );
-        });
   }
 }

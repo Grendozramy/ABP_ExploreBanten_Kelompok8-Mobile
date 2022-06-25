@@ -1,10 +1,17 @@
+import 'package:explore_banten_mobile/models/category_models.dart';
+import 'package:explore_banten_mobile/models/post_models.dart';
+import 'package:explore_banten_mobile/providers/post_providers.dart';
+import 'package:explore_banten_mobile/ui/widgets/post_tile.dart';
 import 'package:flutter/material.dart';
-import '../../models/post.dart';
 import '../../shared/theme.dart';
-import '../../models/kategori.dart';
-import '../widgets/post_tile.dart';
+
+int selectedindex = 0;
 
 class CategoryPage extends StatelessWidget {
+  final KategoriModel kategoris;
+  // ignore: use_key_in_widget_constructors
+  const CategoryPage(this.kategoris);
+
   @override
   Widget build(BuildContext context) {
     Widget header() {
@@ -25,31 +32,12 @@ class CategoryPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Alam',
+                  kategoris.name,
                   style: blackTextStyle.copyWith(
                     fontSize: 18,
                     fontWeight: semibold,
                   ),
                 ),
-                GestureDetector(
-                  onTap: () {
-                    showSearch(
-                      context: context,
-                      delegate: CustomSearch(),
-                    );
-                  },
-                  child: Container(
-                    width: 24,
-                    height: 24,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(
-                          'assets/img/seach1.png',
-                        ),
-                      ),
-                    ),
-                  ),
-                )
               ],
             ),
           ),
@@ -68,22 +56,18 @@ class CategoryPage extends StatelessWidget {
         child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Column(
-            children: [
-              PostTile(
-                Post(
-                    id: 01,
-                    name: 'Tanjung Lesung',
-                    imageUrl: 'assets/img/TanjungLesung.jpg',
-                    address: 'Tanjung Lesung, Banten'),
-              ),
-              PostTile(
-                Post(
-                    id: 02,
-                    name: 'Gunung Luhur',
-                    imageUrl: 'assets/img/gluhur.jpg',
-                    address: 'Citorek Kidul, Kec Cibeber'),
-              ),
-            ],
+            children: PlacesProvider.places
+                .where((element) =>
+                    element.category.name.contains((selectedindex == 0)
+                        ? 'Alam'
+                        : (selectedindex == 1)
+                            ? 'Budaya'
+                            : 'Kuliner'))
+                .toList()
+                .map(
+                  (places) => PostTile(places),
+                )
+                .toList(),
           ),
         ),
       );

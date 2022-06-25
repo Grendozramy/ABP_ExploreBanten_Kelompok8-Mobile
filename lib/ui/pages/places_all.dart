@@ -1,13 +1,17 @@
+import 'package:explore_banten_mobile/providers/category_providers.dart';
 import 'package:flutter/material.dart';
-import '../../models/post.dart';
+import '../../providers/post_providers.dart';
 import '../../shared/theme.dart';
 import '../widgets/post_tile.dart';
+import 'package:provider/provider.dart';
 
 class PlacesPage extends StatelessWidget {
   const PlacesPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    PlacesProvider placesProvider = Provider.of<PlacesProvider>(context);
+
     Widget header() {
       return AppBar(
         backgroundColor: kBGColor,
@@ -16,7 +20,6 @@ class PlacesPage extends StatelessWidget {
             border: Border(
               left: BorderSide(
                 color: kPrimaryColor,
-                width: 3.0,
               ),
             ),
           ),
@@ -31,26 +34,6 @@ class PlacesPage extends StatelessWidget {
                     fontWeight: semibold,
                   ),
                 ),
-                GestureDetector(
-                  onTap: () {
-                    showSearch(
-                      context: context,
-                      delegate: CustomSearch(),
-                    );
-                  },
-                  child: Container(
-                    margin: EdgeInsets.only(left: 180),
-                    width: 24,
-                    height: 24,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(
-                          'assets/img/seach1.png',
-                        ),
-                      ),
-                    ),
-                  ),
-                )
               ],
             ),
           ),
@@ -69,50 +52,11 @@ class PlacesPage extends StatelessWidget {
         child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Column(
-            children: [
-              PostTile(
-                Post(
-                    id: 01,
-                    name: 'Tanjung Lesung',
-                    imageUrl: 'assets/img/TanjungLesung.jpg',
-                    address: 'Tanjung Lesung, Banten'),
-              ),
-              PostTile(
-                Post(
-                    id: 02,
-                    name: 'Gunung Luhur',
-                    imageUrl: 'assets/img/gluhur.jpg',
-                    address: 'Citorek Kidul, Kec Cibeber'),
-              ),
-              PostTile(
-                Post(
-                    id: 03,
-                    name: 'Suku Baduy',
-                    imageUrl: 'assets/img/baduy.jpg',
-                    address: 'Baduy, Banten'),
-              ),
-              PostTile(
-                Post(
-                    id: 03,
-                    name: 'Suku Baduy',
-                    imageUrl: 'assets/img/baduy.jpg',
-                    address: 'Baduy, Banten'),
-              ),
-              PostTile(
-                Post(
-                    id: 03,
-                    name: 'Suku Baduy',
-                    imageUrl: 'assets/img/baduy.jpg',
-                    address: 'Baduy, Banten'),
-              ),
-              PostTile(
-                Post(
-                    id: 03,
-                    name: 'Suku Baduy',
-                    imageUrl: 'assets/img/baduy.jpg',
-                    address: 'Baduy, Banten'),
-              ),
-            ],
+            children: PlacesProvider.places
+                .map(
+                  (places) => PostTile(places),
+                )
+                .toList(),
           ),
         ),
       );
@@ -126,69 +70,5 @@ class PlacesPage extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-class CustomSearch extends SearchDelegate {
-  List<String> searchTerms = [
-    'alam',
-    'budaya',
-  ];
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    return [
-      IconButton(
-        onPressed: () {
-          query = '';
-        },
-        icon: const Icon(Icons.clear),
-      ),
-    ];
-  }
-
-  @override
-  Widget buildLeading(BuildContext context) {
-    return IconButton(
-      icon: const Icon(Icons.arrow_back),
-      onPressed: () {
-        close(context, null);
-      },
-    );
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    List<String> matchQuery = [];
-    for (var item in searchTerms) {
-      if (item.toLowerCase().contains(query.toLowerCase())) {
-        matchQuery.add(item);
-      }
-    }
-    return ListView.builder(
-        itemCount: matchQuery.length,
-        itemBuilder: (context, index) {
-          var result = matchQuery[index];
-          return ListTile(
-            title: Text(result),
-          );
-        });
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    List<String> matchQuery = [];
-    for (var item in searchTerms) {
-      if (item.toLowerCase().contains(query.toLowerCase())) {
-        matchQuery.add(item);
-      }
-    }
-    return ListView.builder(
-        itemCount: matchQuery.length,
-        itemBuilder: (context, index) {
-          var result = matchQuery[index];
-          return ListTile(
-            title: Text(result),
-          );
-        });
   }
 }

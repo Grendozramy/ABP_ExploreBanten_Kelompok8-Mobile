@@ -1,17 +1,24 @@
+import 'package:explore_banten_mobile/ui/pages/post_page.dart';
+
 import 'package:flutter/material.dart';
-import '../../models/post.dart';
+import '../../models/post_models.dart';
 import '../../shared/theme.dart';
 
 class PostTile extends StatelessWidget {
-  final Post post;
+  final PlacesModel places;
 
-  PostTile(this.post);
+  PostTile(this.places);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/post');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PostPage1(places),
+          ),
+        );
       },
       child: Container(
         margin: EdgeInsets.only(
@@ -23,8 +30,9 @@ class PostTile extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: Image.asset(
-                post.imageUrl,
+              child: Image.network(
+                // places.images[0].image,
+                'https://cdn.pixabay.com/photo/2016/11/29/03/28/eagle-1867067_960_720.jpg',
                 width: 70,
                 height: 70,
                 fit: BoxFit.cover,
@@ -38,7 +46,7 @@ class PostTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    post.name,
+                    places.title1,
                     style: blackTextStyle.copyWith(
                       fontSize: 18,
                       fontWeight: medium,
@@ -48,7 +56,7 @@ class PostTile extends StatelessWidget {
                     height: 6,
                   ),
                   Text(
-                    post.address,
+                    places.address1,
                     style: greyTextStyle.copyWith(
                       fontSize: 14,
                       fontWeight: light,

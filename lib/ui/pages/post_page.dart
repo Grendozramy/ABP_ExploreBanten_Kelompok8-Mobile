@@ -1,19 +1,25 @@
 import 'dart:async';
-import 'dart:io';
-
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:explore_banten_mobile/models/category_models.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:explore_banten_mobile/models/post_models.dart';
 import 'package:flutter/material.dart';
 import '../../shared/theme.dart';
+import 'package:maps_launcher/maps_launcher.dart';
 import 'package:flutter_share/flutter_share.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class PostPage extends StatelessWidget {
-  const PostPage({Key? key}) : super(key: key);
+class PostPage1 extends StatelessWidget {
+  final PlacesModel places;
+
+  PostPage1(this.places);
 
   Future<void> share() async {
     await FlutterShare.share(
-        title: 'Example share',
-        text: 'Example share text',
-        linkUrl: 'https://flutter.dev/',
-        chooserTitle: 'Example Chooser Title');
+        title: 'Share Wisata ' + places.title,
+        text: places.title,
+        linkUrl: 'http://explorebanten/blogs/' + places.slug,
+        chooserTitle: places.title1);
   }
 
   @override
@@ -22,8 +28,9 @@ class PostPage extends StatelessWidget {
       return Container(
         child: Stack(
           children: [
-            Image.asset(
-              'assets/img/gluhur.jpg',
+            Image.network(
+              //places.images[0].image,
+              'https://cdn.pixabay.com/photo/2016/11/29/03/28/eagle-1867067_960_720.jpg',
               width: MediaQuery.of(context).size.width,
               height: 324,
               fit: BoxFit.cover,
@@ -39,21 +46,27 @@ class PostPage extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded(
-              child: Column(
-                children: [
-                  Text(
-                    'Gunung Luhur, Negeri di Atas Awan',
-                    softWrap: false,
-                    maxLines: 1,
+            Column(
+              children: [
+                SizedBox(
+                  width: 350,
+                  child: AutoSizeText(
+                    places.title,
+                    maxLines: 2,
                     textAlign: TextAlign.center,
                     style: whiteTextStyle.copyWith(
                       fontSize: 20,
                       fontWeight: semibold,
+                      shadows: [
+                        Shadow(
+                            color: Colors.black.withOpacity(0.3),
+                            offset: const Offset(5, 5),
+                            blurRadius: 15),
+                      ],
                     ),
-                  )
-                ],
-              ),
+                  ),
+                )
+              ],
             )
           ],
         ),
@@ -94,13 +107,12 @@ class PostPage extends StatelessWidget {
                     SizedBox(
                       height: 24,
                     ),
-                    Text(
-                      'Keindahan negeri di atas awan Citorek tak kalah mempesona dibandingkan panorama serupa yang bisa disaksikan di negeri di atas awan yang berada disejumlah daerah. Setelah keberadaan negeri di atas awan Gunung Luhur menjadi viral, banyak pengunjung yang datang setiap harinya. Jumlah pengunjung akan meningkat pesat saat akhir pekan, meskipun sebagian besar pengunjung itu berasal dari Lebak, dan masih sebagian kecil pengunjung dari luar daerah.\nJika pengunjung baru tiba di lokasi lebih dari pukul 08.00 WIB, awan mulai beranjak pergi dan hanya menyuguhkan pemandangan lembah Citorek dari ketinggian saja. Karena itu, menginap adalah salah satu pilihan terbaik supaya tidak ketinggalan momen samudera awan. Tapi jangan bayangkan hotel yang nyaman, karena memang belum tersedia.',
-                      style: blackTextStyle.copyWith(
+                    HtmlWidget(
+                      ' <p align="justify"' + places.description + '</p>',
+                      textStyle: blackTextStyle.copyWith(
                         fontSize: 14,
                         fontWeight: reguler,
                       ),
-                      textAlign: TextAlign.justify,
                     ),
                     SizedBox(
                       height: 20,
@@ -127,7 +139,7 @@ class PostPage extends StatelessWidget {
                       height: 12,
                     ),
                     Text(
-                      'Citorek Kidul, Kec. Cibeber, Kabupaten Lebak, Banten',
+                      places.address,
                       style: blackTextStyle.copyWith(
                         fontSize: 14,
                         fontWeight: reguler,
@@ -148,7 +160,7 @@ class PostPage extends StatelessWidget {
                       height: 12,
                     ),
                     Text(
-                      '07.00 - 18.00 WIB',
+                      places.office_hours,
                       style: blackTextStyle.copyWith(
                         fontSize: 14,
                         fontWeight: reguler,
@@ -169,7 +181,7 @@ class PostPage extends StatelessWidget {
                       height: 12,
                     ),
                     Text(
-                      '0812345671',
+                      places.phone,
                       style: blackTextStyle.copyWith(
                         fontSize: 14,
                         fontWeight: reguler,
@@ -189,13 +201,22 @@ class PostPage extends StatelessWidget {
                     SizedBox(
                       height: 12,
                     ),
-                    Text(
-                      'gunungluhurcitorek.co.id',
-                      style: blackTextStyle.copyWith(
-                        fontSize: 14,
-                        fontWeight: reguler,
+                    InkWell(
+                      child: Text(
+                        places.website,
+                        style: primaryTextStyle.copyWith(
+                          fontSize: 14,
+                          fontWeight: reguler,
+                        ),
+                        textAlign: TextAlign.justify,
                       ),
-                      textAlign: TextAlign.justify,
+                      onTap: () {
+                        if (places.website == '-') {
+                          print('');
+                        } else {
+                          launch(places.website);
+                        }
+                      },
                     ),
                   ],
                 ),
@@ -213,9 +234,8 @@ class PostPage extends StatelessWidget {
         shadowColor: Colors.transparent,
         actions: [
           IconButton(
-            onPressed: () {
-              Navigator.pushNamed(context, '/rute');
-            },
+            onPressed: () => MapsLauncher.launchCoordinates(
+                places.latitude, places.longitude, places.title1),
             icon: const Icon(
               Icons.place,
             ),

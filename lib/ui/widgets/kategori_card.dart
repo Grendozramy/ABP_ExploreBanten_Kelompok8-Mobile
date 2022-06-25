@@ -1,17 +1,24 @@
+import 'package:explore_banten_mobile/ui/pages/category_page.dart';
 import 'package:flutter/material.dart';
-import '../../models/kategori.dart';
+import '../../models/category_models.dart';
+import '../../models/post_models.dart';
 import '../../shared/theme.dart';
 
 class KategoriCard extends StatelessWidget {
-  final Kategori kategori;
+  final KategoriModel kategoris;
 
-  KategoriCard(this.kategori);
+  KategoriCard(this.kategoris);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/tour');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CategoryPage(kategoris),
+          ),
+        );
       },
       child: Container(
         padding: EdgeInsets.symmetric(
@@ -27,7 +34,7 @@ class KategoriCard extends StatelessWidget {
           ),
         ),
         child: Text(
-          kategori.name,
+          kategoris.name,
           style: blackTextStyle.copyWith(
             fontSize: 18,
             fontWeight: semibold,
